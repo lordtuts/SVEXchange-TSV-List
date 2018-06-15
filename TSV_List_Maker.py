@@ -1,19 +1,21 @@
 import praw
 
-# open Reddit instance
-reddit = praw.Reddit(client_id='Your client_id',
-                     client_secret='Your client_secret',
-                     user_agent='Your user_agent')
+reddit = praw.Reddit(client_id='your client_id',
+                     client_secret='your client_secret',
+                     user_agent='your user_agent')
 
-# open /r/SVExchange instance
 subreddit = reddit.subreddit('SVExchange')
 
-# open/create file to append TSVs onto
-f = open("tsvfile.txt", "a+")
+with open("tsvfile.txt", "r") as ins:
+    array = []
+    for line in ins:
+        array.append(line)
 
-# cycle through submission instances
-for submission in subreddit.new(limit=25): 
+f = open("tsvfile.txt", "a")
+
+for submission in subreddit.new(limit=50):
     if len(submission.title) == 4:
-        f.write(str(submission.title) + "\r\n")
-    
+        if (str(submission.title) + "\r\n") not in array:
+            f.write(str(submission.title) + "\r\n")
+
 f.close()
